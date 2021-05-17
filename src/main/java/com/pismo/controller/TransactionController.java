@@ -22,7 +22,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @PostMapping
-    @ApiOperation(value = "Listar todas as transações")
+    @ApiOperation(value = "Criar transação")
     public ResponseEntity<TransactionDTO> create(@RequestBody CreateTransactionDTO createTransactionDTO) throws Exception {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
