@@ -55,7 +55,7 @@ Password:
 
 # Documentação da API com Swagger
 
-Após o deploy, você pode ver todas as documentações da API em:
+Após o deploy é possível conferir a documentação da API em:
 
 ```shell
 http://localhost:8080/swagger-ui/ 
