@@ -96,6 +96,7 @@ curl --location --request POST 'http://localhost:8080/transactions' \
 **GET** - Listar conta e transações pelo id
 ```shell
 curl --location --request GET 'http://localhost:8080/accounts/{accountId}/transactions'
+```
 
 # Testes
 
