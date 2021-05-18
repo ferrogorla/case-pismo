@@ -13,27 +13,47 @@ Transações de tipo **COMPRA** e **SAQUE** são registradas com **valor negativ
 - H2 Database (Banco de dados em memória para testes e demonstrações)
 - JUnit 5
 
-## Como executar
+## Como executar com Docker
 
-- Acessar a pasta do projeto.
+- Acessar a pasta do projeto
 
 ```shell
 cd case-pismo
 ```
 
-- Executar o comando para compilar o projeto. 
+- Executar o comando para fazer o build e gerar a imagem
+
+```shell
+mvn spring-boot:build-image
+```
+
+- Execute o programa através do comando abaixo
+
+```shell
+docker run -p 8080:8080 case-pismo
+```
+
+## Como executar manualmente
+
+- Acessar a pasta do projeto
+
+```shell
+cd case-pismo
+```
+
+- Executar o comando para compilar o projeto
 
 ```shell
 mvn clean install
 ```
 
-- Execute o programa através do comando abaixo.
+- Execute o programa através do comando abaixo
 
 ```shell
 mvn spring-boot:run
 ```
 
-- Execute o programa em modo debug usando os parametros abaixo.
+- Execute o programa em modo debug usando os parametros abaixo
 
 ```shell
 mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8787"
