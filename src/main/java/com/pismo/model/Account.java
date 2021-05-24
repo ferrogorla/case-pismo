@@ -21,6 +21,10 @@ public class Account {
     @OneToMany(targetEntity = Transaction.class, mappedBy = "account", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", updatable = false, nullable = false)
+    private User user;
+
     public Account() {
     }
 
@@ -54,6 +58,14 @@ public class Account {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

@@ -21,10 +21,12 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping
-    @ApiOperation(value = "Listar todas as contas")
-    public ResponseEntity<List<AccountDTO>> getAll() {
+    @ApiOperation(value = "Listar todas as contas de um usuário")
+    public ResponseEntity<List<AccountDTO>> getAccounts(@RequestParam Long userId,
+                                                        @RequestParam(defaultValue = "0") Integer pageNumber,
+                                                        @RequestParam(defaultValue = "10") Integer pageSize) {
         return ResponseEntity
-                .ok(accountService.getAll());
+                .ok(accountService.getAccounts(userId, pageNumber, pageSize));
     }
 
     @GetMapping("/{accountId}")
@@ -35,7 +37,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}/transactions")
-    @ApiOperation(value = "Listar conta e transações pelo id da conta")
+    @ApiOperation(value = "Listar conta com transações pelo id")
     public ResponseEntity<AccountDTO> getAccountAndTransactions(@PathVariable Long accountId) {
         return ResponseEntity
                 .ok(accountService.getAccountAndTransactions(accountId));

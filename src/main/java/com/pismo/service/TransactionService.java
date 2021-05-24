@@ -5,6 +5,7 @@ import com.pismo.dto.TransactionDTO;
 import com.pismo.exception.TransactionException;
 import com.pismo.mapper.TransactionMapper;
 import com.pismo.model.Account;
+import com.pismo.model.OperationType;
 import com.pismo.model.Transaction;
 import com.pismo.repository.AccountRepository;
 import com.pismo.repository.OperationTypeRepository;
@@ -12,7 +13,13 @@ import com.pismo.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -30,6 +37,7 @@ public class TransactionService {
     @Autowired
     private TransactionMapper transactionMapper;
 
+    @Transactional
     public TransactionDTO create(CreateTransactionDTO createTransactionDTO) {
 
         validateInputs(createTransactionDTO);
@@ -40,6 +48,8 @@ public class TransactionService {
         var operationType = operationTypeRepository.findById(createTransactionDTO.getOperationTypeId())
                 .orElseThrow(() -> new TransactionException("Invalid operation type!"));
 
+        checkBalance(operationType, account.getBalance(), createTransactionDTO.getAmount());
+
         var amount = createTransactionDTO.getAmount() * operationType.getOperationSign();
 
         var transaction = transactionMapper.toEntity(account, operationType, amount);
@@ -49,6 +59,12 @@ public class TransactionService {
         var savedTransaction = transactionRepository.save(transaction);
 
         return transactionMapper.toDTO(savedTransaction);
+    }
+
+    public List<TransactionDTO> getAllByAccountId(Long accountId, Integer pageNumber, Integer pageSize) {
+        Pageable paging = PageRequest.of(pageNumber, pageSize, Sort.by("id").descending());
+        var transactions = transactionRepository.findByAccountId(accountId, paging);
+        return transactionMapper.toListDTO(transactions);
     }
 
     private void validateInputs(CreateTransactionDTO createTransactionDTO) {
@@ -66,6 +82,14 @@ public class TransactionService {
         var newBalance = account.getBalance() + transaction.getAmount();
         account.setBalance(newBalance);
         accountRepository.save(account);
+    }
+
+    private void checkBalance(OperationType operationType, double balance, double amount) {
+        if(!operationType.isPayment()) {
+            double newLimit = balance - amount;
+            if(newLimit < 0)
+                throw new TransactionException("Balance not enough for transaction amount!");
+        }
     }
 
 }

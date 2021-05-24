@@ -10,6 +10,8 @@ import com.pismo.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,11 +29,6 @@ public class AccountService {
     @Autowired
     private AccountMapper accountMapper;
 
-    public List<AccountDTO> getAll(){
-        var accounts = accountRepository.findAll();
-        return accountMapper.toListDTO(accounts);
-    }
-
     public AccountDTO getById(Long accountId) {
         var account = findById(accountId);
         return accountMapper.toDTO(account);
@@ -39,7 +36,8 @@ public class AccountService {
 
     public AccountDTO getAccountAndTransactions(Long accountId) {
         var account = findById(accountId);
-        var transactions = transactionRepository.findByAccountId(accountId);
+        var transactions = transactionRepository.findByAccountId(accountId,
+                PageRequest.of(0,10, Sort.by("id").descending()));
         return accountMapper.toDTO(account, transactions);
     }
 
@@ -54,6 +52,11 @@ public class AccountService {
         var savedAccount = accountRepository.save(account);
 
         return accountMapper.toDTO(savedAccount);
+    }
+
+    public List<AccountDTO> getAccounts(Long userId, Integer pageNumber, Integer pageSize) {
+        var accounts = accountRepository.getAccounts(userId, PageRequest.of(0,10, Sort.by("id").descending()));
+        return accountMapper.toListDTO(accounts);
     }
 
     private Account findById(Long accountId) {

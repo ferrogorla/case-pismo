@@ -56,4 +56,8 @@ public class OperationType {
         return negative ? -1d : 1d;
     }
 
+    public boolean isPayment() {
+        return id.equals(4L);
+    }
+
 }

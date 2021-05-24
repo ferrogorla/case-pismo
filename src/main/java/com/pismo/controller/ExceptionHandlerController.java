@@ -3,6 +3,7 @@ package com.pismo.controller;
 import com.pismo.dto.ErrorDTO;
 import com.pismo.exception.AccountException;
 import com.pismo.exception.TransactionException;
+import com.pismo.exception.UserException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = { AccountException.class, TransactionException.class })
+    @ExceptionHandler(value = { AccountException.class, TransactionException.class, UserException.class })
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(ex.getMessage()));
     }

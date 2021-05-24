@@ -28,7 +28,7 @@ public class TransactionControllerTest {
     public void create() throws Exception {
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
-        createTransactionDTO.setOperationTypeId(3L);
+        createTransactionDTO.setOperationTypeId(4L);
         createTransactionDTO.setAmount(123.45D);
 
         HttpEntity<CreateTransactionDTO> request = new HttpEntity<>(createTransactionDTO);
@@ -40,8 +40,8 @@ public class TransactionControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(1L, transactionDTO.getTransactionId());
         assertEquals(1L, transactionDTO.getAccountId());
-        assertEquals(3L, transactionDTO.getOperationTypeId());
-        assertEquals(-123.45D, transactionDTO.getAmount());
+        assertEquals(4L, transactionDTO.getOperationTypeId());
+        assertEquals(123.45D, transactionDTO.getAmount());
     }
 
 }

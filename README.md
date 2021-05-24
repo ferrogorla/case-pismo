@@ -83,18 +83,28 @@ http://localhost:8080/swagger-ui/
 
 # Documentação da API
 
+**POST** - Criar usuário
+```shell
+curl --location --request POST 'http://localhost:8080/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email": "user01@email.com"
+}'
+```
+
 **POST** - Criar conta
 ```shell
 curl --location --request POST 'http://localhost:8080/accounts' \
 --header 'Content-Type: application/json' \
 --data-raw '{
+    "user_id": 1,,
     "document_number": "12345678900"
 }'
 ```
 
-**GET** - Listar todas as contas
+**GET** - Listar todas as contas de um usuário de forma paginada
 ```shell
-curl --location --request GET 'http://localhost:8080/accounts'
+curl --location --request GET 'http://localhost:8080/accounts?userId=1&pageNumber=0&pageSize=5'
 ```
 
 **GET** - Listar conta pelo id
@@ -107,15 +117,20 @@ curl --location --request GET 'http://localhost:8080/accounts/{accountId}'
 curl --location --request POST 'http://localhost:8080/transactions' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-"account_id": 1,
-"operation_type_id": 3,
-"amount": 123.45
+    "account_id": 1,
+    "operation_type_id": 3,
+    "amount": 123.45
 }'
 ```
 
 **GET** - Listar conta e transações pelo id
 ```shell
 curl --location --request GET 'http://localhost:8080/accounts/{accountId}/transactions'
+```
+
+**GET** - Listar todas as transações de uma conta de forma paginada
+```shell
+curl --location --request GET 'http://localhost:8080/transactions?accountId=1&pageNumber=0&pageSize=5'
 ```
 
 # Testes
