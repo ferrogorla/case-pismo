@@ -8,6 +8,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +19,9 @@ import java.util.List;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class TransactionMapper {
 
-    private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
+    private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss")
+            .withZone(ZoneId.systemDefault());
 
     public TransactionDTO toDTO(Transaction transaction) {
         TransactionDTO transactionDTO = new TransactionDTO();
@@ -38,7 +41,7 @@ public class TransactionMapper {
         return results;
     }
 
-    public Transaction toEntity(Account account, OperationType operationType, Double amount) {
+    public Transaction toEntity(Account account, OperationType operationType, BigDecimal amount) {
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setOperationType(operationType);

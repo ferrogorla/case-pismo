@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class AccountControllerTest {
         assertEquals(1L, accountDTO.getId());
         assertEquals(1L, userDTO.getId());
         assertEquals(12345678900L, accountDTO.getDocumentNumber());
-        assertEquals(500D, accountDTO.getBalance());
+        assertEquals(BigDecimal.valueOf(500).setScale(2), accountDTO.getBalance());
         assertEquals(null, accountDTO.getTransactions());
 
     }
@@ -70,7 +71,7 @@ public class AccountControllerTest {
         assertEquals(1L, accountDTO.getId());
         assertEquals(1L, accountDTO.getUserId());
         assertEquals(12345678900L, accountDTO.getDocumentNumber());
-        assertEquals(500D, accountDTO.getBalance());
+        assertEquals(BigDecimal.valueOf(500).setScale(2), accountDTO.getBalance());
         assertEquals(null, accountDTO.getTransactions());
     }
 

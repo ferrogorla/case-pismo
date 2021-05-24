@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -53,7 +54,7 @@ public class TransactionServiceTest {
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(null);
         createTransactionDTO.setOperationTypeId(3L);
-        createTransactionDTO.setAmount(123.45D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(123.45).setScale(2));
 
         TransactionException transactionException = assertThrows(TransactionException.class,
                 ()-> transactionService.create(createTransactionDTO));
@@ -65,7 +66,7 @@ public class TransactionServiceTest {
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
         createTransactionDTO.setOperationTypeId(null);
-        createTransactionDTO.setAmount(123.45D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(123.45).setScale(2));
 
         TransactionException transactionException = assertThrows(TransactionException.class,
                 ()-> transactionService.create(createTransactionDTO));
@@ -77,7 +78,7 @@ public class TransactionServiceTest {
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
         createTransactionDTO.setOperationTypeId(0L);
-        createTransactionDTO.setAmount(123.45D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(123.45).setScale(2));
 
         TransactionException transactionException = assertThrows(TransactionException.class,
                 () -> transactionService.create(createTransactionDTO));
@@ -89,7 +90,7 @@ public class TransactionServiceTest {
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
         createTransactionDTO.setOperationTypeId(5L);
-        createTransactionDTO.setAmount(123.45D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(123.45).setScale(2));
 
         TransactionException transactionException = assertThrows(TransactionException.class,
                 ()-> transactionService.create(createTransactionDTO));
@@ -113,7 +114,7 @@ public class TransactionServiceTest {
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
         createTransactionDTO.setOperationTypeId(3L);
-        createTransactionDTO.setAmount(0D);
+        createTransactionDTO.setAmount(BigDecimal.ZERO);
 
         TransactionException transactionException = assertThrows(TransactionException.class,
                 ()-> transactionService.create(createTransactionDTO));
@@ -125,7 +126,7 @@ public class TransactionServiceTest {
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
         createTransactionDTO.setOperationTypeId(3L);
-        createTransactionDTO.setAmount(-1D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(-1).setScale(2));
 
         TransactionException transactionException = assertThrows(TransactionException.class,
                 ()-> transactionService.create(createTransactionDTO));
@@ -137,7 +138,7 @@ public class TransactionServiceTest {
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(0L);
         createTransactionDTO.setOperationTypeId(3L);
-        createTransactionDTO.setAmount(123.45D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(123.45).setScale(2));
 
         when(accountRepository.findById(0L)).thenReturn(Optional.empty());
 
@@ -154,45 +155,43 @@ public class TransactionServiceTest {
         Account foundedAccount = new Account();
         foundedAccount.setId(1L);
         foundedAccount.setDocumentNumber(12345678900L);
-        foundedAccount.setBalance(0D);
-        foundedAccount.setBalance(500D);
+        foundedAccount.setBalance(BigDecimal.valueOf(500).setScale(2));
 
         OperationType operationType = new OperationType(3L, "SAQUE", true);
 
         Account account = new Account();
         account.setId(1L);
         account.setDocumentNumber(12345678900L);
-        account.setBalance(0D);
-        account.setBalance(500D);
+        account.setBalance(BigDecimal.valueOf(500).setScale(2));
 
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setOperationType(operationType);
-        transaction.setAmount(-123.45D);
+        transaction.setAmount(BigDecimal.valueOf(-123.45).setScale(2));
         transaction.setEventDate(now);
 
         Transaction savedTransaction = new Transaction();
         savedTransaction.setId(1L);
         savedTransaction.setAccount(account);
         savedTransaction.setOperationType(operationType);
-        savedTransaction.setAmount(-123.45D);
+        savedTransaction.setAmount(BigDecimal.valueOf(-123.45).setScale(2));
         savedTransaction.setEventDate(now);
 
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setTransactionId(1L);
         transactionDTO.setAccountId(1L);
         transactionDTO.setOperationTypeId(3L);
-        transactionDTO.setAmount(-123.45D);
+        transactionDTO.setAmount(BigDecimal.valueOf(-123.45).setScale(2));
         transactionDTO.setEventDate(date);
 
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
         createTransactionDTO.setOperationTypeId(3L);
-        createTransactionDTO.setAmount(123.45D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(123.45).setScale(2));
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(foundedAccount));
         when(operationTypeRepository.findById(3L)).thenReturn(Optional.of(operationType));
-        when(transactionMapper.toEntity(foundedAccount, operationType, -123.45D)).thenReturn(transaction);
+        when(transactionMapper.toEntity(foundedAccount, operationType, BigDecimal.valueOf(-123.45).setScale(2))).thenReturn(transaction);
         when(accountRepository.save(foundedAccount)).thenReturn(account);
         when(transactionRepository.save(transaction)).thenReturn(savedTransaction);
         when(transactionMapper.toDTO(savedTransaction)).thenReturn(transactionDTO);
@@ -214,46 +213,46 @@ public class TransactionServiceTest {
         Account foundedAccount = new Account();
         foundedAccount.setId(1L);
         foundedAccount.setDocumentNumber(12345678900L);
-        foundedAccount.setBalance(0D);
-        foundedAccount.setBalance(100D);
+        foundedAccount.setBalance(BigDecimal.ZERO);
+        foundedAccount.setBalance(BigDecimal.valueOf(100).setScale(2));
 
         OperationType operationType = new OperationType(3L, "SAQUE", true);
 
         Account account = new Account();
         account.setId(1L);
         account.setDocumentNumber(12345678900L);
-        account.setBalance(0D);
-        account.setBalance(100D);
+        account.setBalance(BigDecimal.ZERO);
+        account.setBalance(BigDecimal.valueOf(100).setScale(2));
 
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setOperationType(operationType);
-        transaction.setAmount(-123.45D);
+        transaction.setAmount(BigDecimal.valueOf(-123.45).setScale(2));
         transaction.setEventDate(now);
 
         Transaction savedTransaction = new Transaction();
         savedTransaction.setId(1L);
         savedTransaction.setAccount(account);
         savedTransaction.setOperationType(operationType);
-        savedTransaction.setAmount(-123.45D);
+        savedTransaction.setAmount(BigDecimal.valueOf(-123.45).setScale(2));
         savedTransaction.setEventDate(now);
 
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setTransactionId(1L);
         transactionDTO.setAccountId(1L);
         transactionDTO.setOperationTypeId(3L);
-        transactionDTO.setAmount(-123.45D);
+        transactionDTO.setAmount(BigDecimal.valueOf(-123.45).setScale(2));
         transactionDTO.setEventDate(date);
 
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
         createTransactionDTO.setOperationTypeId(3L);
-        createTransactionDTO.setAmount(123.45D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(123.45).setScale(2));
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(foundedAccount));
         when(operationTypeRepository.findById(3L)).thenReturn(Optional.of(operationType));
 
-        verify(transactionMapper, never()).toEntity(foundedAccount, operationType, -123.45D);
+        verify(transactionMapper, never()).toEntity(foundedAccount, operationType, BigDecimal.valueOf(-123.45).setScale(2));
         verify(accountRepository, never()).save(foundedAccount);
         verify(transactionRepository, never()).save(transaction);
         verify(transactionMapper, never()).toDTO(savedTransaction);
@@ -272,45 +271,43 @@ public class TransactionServiceTest {
         Account foundedAccount = new Account();
         foundedAccount.setId(1L);
         foundedAccount.setDocumentNumber(12345678900L);
-        foundedAccount.setBalance(0D);
-        foundedAccount.setBalance(500D);
+        foundedAccount.setBalance(BigDecimal.valueOf(500).setScale(2));
 
         OperationType operationType = new OperationType(3L, "SAQUE", true);
 
         Account account = new Account();
         account.setId(1L);
         account.setDocumentNumber(12345678900L);
-        account.setBalance(0D);
-        account.setBalance(500D);
+        account.setBalance(BigDecimal.valueOf(500).setScale(2));
 
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setOperationType(operationType);
-        transaction.setAmount(-123.45D);
+        transaction.setAmount(BigDecimal.valueOf(-123.45).setScale(2));
         transaction.setEventDate(now);
 
         Transaction savedTransaction = new Transaction();
         savedTransaction.setId(1L);
         savedTransaction.setAccount(account);
         savedTransaction.setOperationType(operationType);
-        savedTransaction.setAmount(-123.45D);
+        savedTransaction.setAmount(BigDecimal.valueOf(-123.45).setScale(2));
         savedTransaction.setEventDate(now);
 
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setTransactionId(1L);
         transactionDTO.setAccountId(1L);
         transactionDTO.setOperationTypeId(3L);
-        transactionDTO.setAmount(-123.45D);
+        transactionDTO.setAmount(BigDecimal.valueOf(-123.45).setScale(2));
         transactionDTO.setEventDate(date);
 
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
         createTransactionDTO.setOperationTypeId(3L);
-        createTransactionDTO.setAmount(123.45D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(123.45).setScale(2));
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(foundedAccount));
         when(operationTypeRepository.findById(3L)).thenReturn(Optional.of(operationType));
-        when(transactionMapper.toEntity(foundedAccount, operationType, -123.45D)).thenReturn(transaction);
+        when(transactionMapper.toEntity(foundedAccount, operationType, BigDecimal.valueOf(-123.45).setScale(2))).thenReturn(transaction);
         when(accountRepository.save(foundedAccount)).thenThrow(TransactionException.class);
 
         verify(transactionRepository, never()).save(transaction);

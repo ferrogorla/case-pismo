@@ -1,6 +1,7 @@
 package com.pismo.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ public class Account {
     private Long documentNumber;
 
     @Column(name = "balance", nullable = false)
-    private Double balance;
+    private BigDecimal balance;
 
     @OneToMany(targetEntity = Transaction.class, mappedBy = "account", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
@@ -44,11 +45,11 @@ public class Account {
         this.documentNumber = documentNumber;
     }
 
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

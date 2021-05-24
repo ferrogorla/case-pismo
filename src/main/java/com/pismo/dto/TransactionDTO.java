@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 @ApiModel(description = "Modelo de retorno de dados da transação")
 public class TransactionDTO {
 
@@ -21,7 +23,7 @@ public class TransactionDTO {
 
     @JsonProperty("amount")
     @ApiModelProperty(notes = "Valor da transação", example = "123.45")
-    private Double amount;
+    private BigDecimal amount;
 
     @JsonProperty("event_date")
     @ApiModelProperty(notes = "Data da realização da transação")
@@ -51,11 +53,11 @@ public class TransactionDTO {
         this.operationTypeId = operationTypeId;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

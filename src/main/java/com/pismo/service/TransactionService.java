@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -50,7 +51,7 @@ public class TransactionService {
 
         checkBalance(operationType, account.getBalance(), createTransactionDTO.getAmount());
 
-        var amount = createTransactionDTO.getAmount() * operationType.getOperationSign();
+        var amount = createTransactionDTO.getAmount().multiply(operationType.getOperationSign()).setScale(2);
 
         var transaction = transactionMapper.toEntity(account, operationType, amount);
 
@@ -71,23 +72,26 @@ public class TransactionService {
         if (createTransactionDTO.getAccountId() == null)
             throw new TransactionException("Invalid account!");
 
-        if (createTransactionDTO.getOperationTypeId() == null || createTransactionDTO.getOperationTypeId() <= 0 || createTransactionDTO.getOperationTypeId() > 4)
+        if (createTransactionDTO.getOperationTypeId() == null ||
+                createTransactionDTO.getOperationTypeId() <= 0 ||
+                createTransactionDTO.getOperationTypeId() > 4)
             throw new TransactionException("Invalid operation type!");
 
-        if (createTransactionDTO.getAmount() == null || createTransactionDTO.getAmount() <= 0)
+        if (createTransactionDTO.getAmount() == null ||
+                createTransactionDTO.getAmount().compareTo(BigDecimal.ZERO) <= 0)
             throw new TransactionException("Amount must be greater than zero!");
     }
 
     private void calculateNewBalanceForAccount(Account account, Transaction transaction) {
-        var newBalance = account.getBalance() + transaction.getAmount();
+        var newBalance = account.getBalance().add(transaction.getAmount()).setScale(2);
         account.setBalance(newBalance);
         accountRepository.save(account);
     }
 
-    private void checkBalance(OperationType operationType, double balance, double amount) {
+    private void checkBalance(OperationType operationType, BigDecimal balance, BigDecimal amount) {
         if(!operationType.isPayment()) {
-            double newLimit = balance - amount;
-            if(newLimit < 0)
+            var newLimit = balance.subtract(amount);
+            if (newLimit.compareTo(BigDecimal.ZERO) < 0)
                 throw new TransactionException("Balance not enough for transaction amount!");
         }
     }

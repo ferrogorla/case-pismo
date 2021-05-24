@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "operation_types")
@@ -52,8 +53,8 @@ public class OperationType {
         this.negative = negative;
     }
 
-    public Double getOperationSign() {
-        return negative ? -1d : 1d;
+    public BigDecimal getOperationSign() {
+        return negative ? BigDecimal.valueOf(-1D) : BigDecimal.valueOf(1D);
     }
 
     public boolean isPayment() {

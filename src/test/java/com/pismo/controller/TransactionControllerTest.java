@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,7 +30,7 @@ public class TransactionControllerTest {
         CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
         createTransactionDTO.setAccountId(1L);
         createTransactionDTO.setOperationTypeId(4L);
-        createTransactionDTO.setAmount(123.45D);
+        createTransactionDTO.setAmount(BigDecimal.valueOf(123.45).setScale(2));
 
         HttpEntity<CreateTransactionDTO> request = new HttpEntity<>(createTransactionDTO);
 
@@ -41,7 +42,7 @@ public class TransactionControllerTest {
         assertEquals(1L, transactionDTO.getTransactionId());
         assertEquals(1L, transactionDTO.getAccountId());
         assertEquals(4L, transactionDTO.getOperationTypeId());
-        assertEquals(123.45D, transactionDTO.getAmount());
+        assertEquals(BigDecimal.valueOf(123.45).setScale(2), transactionDTO.getAmount());
     }
 
 }

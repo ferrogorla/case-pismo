@@ -1,6 +1,7 @@
 package com.pismo.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -21,7 +22,7 @@ public class Transaction {
     private OperationType operationType;
 
     @Column(name = "amount", updatable = false, nullable = false)
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(name = "event_date", nullable = false)
     private Instant eventDate;
@@ -53,11 +54,11 @@ public class Transaction {
         this.operationType = operationType;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

@@ -11,11 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -52,17 +51,17 @@ public class AccountServiceTest {
 
         Account account = new Account();
         account.setDocumentNumber(12345678900L);
-        account.setBalance(0D);
+        account.setBalance(BigDecimal.ZERO);
 
         Account savedAccount = new Account();
         savedAccount.setId(1L);
         savedAccount.setDocumentNumber(12345678900L);
-        savedAccount.setBalance(0D);
+        savedAccount.setBalance(BigDecimal.ZERO);
 
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setId(1L);
         accountDTO.setDocumentNumber(12345678900L);
-        accountDTO.setBalance(0D);
+        accountDTO.setBalance(BigDecimal.ZERO);
 
         when(accountRepository.findByDocumentNumber(12345678900L)).thenReturn(Optional.empty());
         when(accountMapper.toEntity(createAccountDTO)).thenReturn(account);
@@ -84,7 +83,7 @@ public class AccountServiceTest {
         Account account = new Account();
         account.setId(1L);
         account.setDocumentNumber(12345678900L);
-        account.setBalance(0D);
+        account.setBalance(BigDecimal.ZERO);
 
         when(accountRepository.findByDocumentNumber(12345678900L)).thenReturn(Optional.of(account));
 
@@ -98,12 +97,12 @@ public class AccountServiceTest {
         Account account = new Account();
         account.setId(1L);
         account.setDocumentNumber(12345678900L);
-        account.setBalance(0D);
+        account.setBalance(BigDecimal.ZERO);
 
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setId(1L);
         accountDTO.setDocumentNumber(12345678900L);
-        accountDTO.setBalance(0D);
+        accountDTO.setBalance(BigDecimal.ZERO);
 
         when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
         when(accountMapper.toDTO(account)).thenReturn(accountDTO);

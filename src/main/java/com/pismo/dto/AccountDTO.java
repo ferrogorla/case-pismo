@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @ApiModel(description = "Modelo de retorno de dados da conta")
@@ -24,7 +25,7 @@ public class AccountDTO {
 
     @JsonProperty("balance")
     @ApiModelProperty(notes = "Saldo da conta", example = "123.45")
-    private Double balance;
+    private BigDecimal balance;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("transactions")
@@ -55,11 +56,11 @@ public class AccountDTO {
         this.documentNumber = documentNumber;
     }
 
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class AccountMapper {
         Account account = new Account();
         account.setUser(user);
         account.setDocumentNumber(createAccountDTO.getDocumentNumber());
-        account.setBalance(500d);
+        account.setBalance(BigDecimal.valueOf(500).setScale(2));
         return account;
     }
 
