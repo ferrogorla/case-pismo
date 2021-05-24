@@ -207,6 +207,64 @@ public class TransactionServiceTest {
     }
 
     @Test
+    public void createTransactionWhenBalanceIsNotEnough() {
+        Instant now = Instant.now();
+        String date = DATE_TIME_FORMATTER.format(now);
+
+        Account foundedAccount = new Account();
+        foundedAccount.setId(1L);
+        foundedAccount.setDocumentNumber(12345678900L);
+        foundedAccount.setBalance(0D);
+        foundedAccount.setBalance(100D);
+
+        OperationType operationType = new OperationType(3L, "SAQUE", true);
+
+        Account account = new Account();
+        account.setId(1L);
+        account.setDocumentNumber(12345678900L);
+        account.setBalance(0D);
+        account.setBalance(100D);
+
+        Transaction transaction = new Transaction();
+        transaction.setAccount(account);
+        transaction.setOperationType(operationType);
+        transaction.setAmount(-123.45D);
+        transaction.setEventDate(now);
+
+        Transaction savedTransaction = new Transaction();
+        savedTransaction.setId(1L);
+        savedTransaction.setAccount(account);
+        savedTransaction.setOperationType(operationType);
+        savedTransaction.setAmount(-123.45D);
+        savedTransaction.setEventDate(now);
+
+        TransactionDTO transactionDTO = new TransactionDTO();
+        transactionDTO.setTransactionId(1L);
+        transactionDTO.setAccountId(1L);
+        transactionDTO.setOperationTypeId(3L);
+        transactionDTO.setAmount(-123.45D);
+        transactionDTO.setEventDate(date);
+
+        CreateTransactionDTO createTransactionDTO = new CreateTransactionDTO();
+        createTransactionDTO.setAccountId(1L);
+        createTransactionDTO.setOperationTypeId(3L);
+        createTransactionDTO.setAmount(123.45D);
+
+        when(accountRepository.findById(1L)).thenReturn(Optional.of(foundedAccount));
+        when(operationTypeRepository.findById(3L)).thenReturn(Optional.of(operationType));
+
+        verify(transactionMapper, never()).toEntity(foundedAccount, operationType, -123.45D);
+        verify(accountRepository, never()).save(foundedAccount);
+        verify(transactionRepository, never()).save(transaction);
+        verify(transactionMapper, never()).toDTO(savedTransaction);
+
+        TransactionException transactionException = assertThrows(TransactionException.class,
+                ()-> transactionService.create(createTransactionDTO));
+        assertEquals("Balance not enough for transaction amount!", transactionException.getMessage());
+
+    }
+
+    @Test
     public void createTransactionWithError() {
         Instant now = Instant.now();
         String date = DATE_TIME_FORMATTER.format(now);
@@ -260,7 +318,7 @@ public class TransactionServiceTest {
 
         TransactionException transactionException = assertThrows(TransactionException.class,
                 ()-> transactionService.create(createTransactionDTO));
-        assertEquals(null, transactionException.getMessage());
+        assertNull(transactionException.getMessage());
 
     }
 
